@@ -1,1 +1,3 @@
 Matrix Multiplication using Hive
+
+The Program stores the result of the multiplication into a Hive table and then counts the number of matrix elements and the average matrix value of the multiplication result
