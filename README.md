@@ -13,3 +13,5 @@ Project 4 : Finding Single Node Shortest Distance using Spark and Scala
 Project 5 : Sparce Matrix Multiplication in pig
 
 Project 6 : Matrix Multiplication using Hive
+
+Final Project : Recommendation system on movielens dataset Using MLLib and Scala
