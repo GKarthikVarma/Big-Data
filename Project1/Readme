@@ -1,1 +1,39 @@
 The purpose of this project is to develop a simple Map-Reduce program on Hadoop to multiply two sparse matrices.
+
+Pseudo Code:
+class Elem extends Writable {
+  short tag;  // 0 for M, 1 for N
+  int index;  // one of the indexes (the other is used as a key)
+  double value;
+  ...
+}
+
+class Pair extends WritableComparable<Pair> {
+  int i;
+  int j;
+  ...
+}
+First Map-Reduce job:
+map(key,line) =             // mapper for matrix M
+  split line into 3 values: i, j, and v
+  emit(j,new Elem(0,i,v))
+
+map(key,line) =             // mapper for matrix N
+  split line into 3 values: i, j, and v
+  emit(i,new Elem(1,j,v))
+
+reduce(index,values) =
+  A = all v in values with v.tag==0
+  B = all v in values with v.tag==1
+  for a in A
+     for b in B
+         emit(new Pair(a.index,b.index),a.value*b.value)
+Second Map-Reduce job:
+map(key,value) =  // do nothing
+  emit(key,value)
+
+reduce(pair,values) =  // do the summation
+  m = 0
+  for v in values
+    m = m+v
+  emit(pair,pair.i+","+pair.j+","+m)
