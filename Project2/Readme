@@ -1,5 +1,4 @@
-The purpose of this project is to develop a graph analysis program using Map-Reduce.
-
+The purpose of this project is to develop a graph analysis program using Map-Reduce that finds the connected components of any undirected graph and prints the size of these connected components. A connected component of a graph is a subgraph of the graph in which there is a path from any two vertices in the subgraph. For the graphs: 0,8,9 and 1,2,3,4,5,6,7. The program prints the sizes of these connected components: 3 and 7.
 graph.java takes 3 arguments in the order:
 graph-input-file
 intermediate
@@ -7,31 +6,3 @@ output
 
 output contains the result
 
-Pseudo Code:
-First Map-Reduce job:
-
-map ( key, line ) =
-  parse the line to get the vertex VID and the adjacent vector
-  emit( VID, new Vertex(0,VID,VID,adjacent) )
-Second Map-Reduce job:
-map ( key, vertex ) =
-  emit( vertex.VID, vertex )   // pass the graph topology
-  for n in vertex.adjacent:
-     emit( n, new Vertex(1,vertex.group) )  // send the group # to the adjacent vertices
-
-reduce ( vid, values ) =
-  m = Long.MAX_VALUE;
-  for v in values:
-     if v.tag == 0
-        then adj = v.adjacent.clone()     // found the vertex with vid
-     m = min(m,v.group)
-  emit( m, new Vertex(0,m,vid,adj) )      // new group #
-Final Map-Reduce job:
-map ( group, value ) =
-   emit(group,1)
-
-reduce ( group, values ) =
-   m = 0
-   for v in values
-       m = m+v
-   emit(group,m)
