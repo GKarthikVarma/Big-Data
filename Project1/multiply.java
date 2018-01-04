@@ -187,7 +187,6 @@ public class Multiply extends Configured implements Tool {
 			Matrix_M m1 = new Matrix_M(Integer.parseInt(val[0]),Integer.parseInt(val[1]),Float.parseFloat(val[2]));
 			Text key_pair = new Text();
 			key_pair.set(String.valueOf(m1.M_j));
-			//value_pair.set("M" + "," + m1.M_i + "," + m1.M_value);
 			context.write(key_pair, new Matrix_intermediate(m1));
 			
 		}
@@ -203,7 +202,6 @@ public class Multiply extends Configured implements Tool {
 			Matrix_N n1 = new Matrix_N(Integer.parseInt(val[0]),Integer.parseInt(val[1]),Float.parseFloat(val[2]));
 			Text key_pair = new Text();
 			key_pair.set(String.valueOf(n1.N_i));
-			//value_pair.set("N" + "," + n1.N_j + "," + n1.N_value);
 			context.write(key_pair, new Matrix_intermediate(n1));
 		}
 		
@@ -214,15 +212,10 @@ public class Multiply extends Configured implements Tool {
 		public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException{
 			String next_line = value.toString();
 			String[] val = next_line.split(",");
-			
-			///Matrix_MN mn1 = new Matrix_MN(Integer.parseInt(val[1].trim()),Integer.parseInt(val[2]),Float.parseFloat(val[3]));
 			Text key_pair = new Text();
 			key_pair.set(val[1] + "," + val[2]);
 			Text value_pair = new Text();
-			value_pair.set(val[3]);
-			//value_pair.set(mn1.value + "");
-			
-			//context.write(key_pair,new Matrix_Final(mn1));
+			value_pair.set(val[3]);			
 			context.write(key_pair, value_pair);
 		}
 	}
@@ -235,8 +228,6 @@ public class Multiply extends Configured implements Tool {
 			String[] input_values;
 			
 			//getting inputs to reducer and dividing into two parts
-			//HashMap<Integer, Float> M_matrix = new HashMap<Integer,Float>();
-			//HashMap<Integer, Float> N_matrix = new HashMap<Integer, Float>();
 			Vector<Matrix_M> M_matrix = new Vector<Matrix_M>();
 			Vector<Matrix_N> N_matrix = new Vector<Matrix_N>();
 			Text key_pair = new Text();
@@ -267,46 +258,6 @@ public class Multiply extends Configured implements Tool {
 					context.write(key_pair, value_pair);
 				}
 			}
-
-			
-			/*
-			for(int i = 0; i<= max; i++)
-			{
-				exists = 0;
-				//get m value
-				if(M_matrix.containsKey(i))
-				{
-					m_value = M_matrix.get(i);
-					exists = 1;
-				}else {
-					m_value = 0;
-				}
-				
-				//getting n values
-				//for(int j=0; j<=max; j++)
-				//{
-					if(N_matrix.containsKey(i))
-					{
-						n_value = N_matrix.get(i);
-						exists = 1;
-					}else {
-						n_value = 0;
-					}
-				
-					end_value = m_value * n_value;
-				
-					if(exists != 0)
-					{
-						outputKey.set(Integer.toString(i) + "," + new Text(key.toString()) + ",");
-						outputValue.set(Float.toString(end_value));
-						context.write(outputKey, outputValue);
-					}
-				//}
-				
-				 
-				
-			}
-			 */
 		}
 	}
 	
@@ -314,10 +265,7 @@ public class Multiply extends Configured implements Tool {
 		@Override
 		public void reduce(Text key, Iterable<Text> value, Context context)throws IOException, InterruptedException{
 			float output = 0;
-			//String input_reducer = value.toString();
-			//String input_values;
-			//String out;
-			
+		
 			//Set Outputs
 			Text key_pair = new Text();
 			Text value_pair = new Text();
